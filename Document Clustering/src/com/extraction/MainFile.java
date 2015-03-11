@@ -3,15 +3,11 @@ package com.extraction;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Reader;
 import java.util.Date;
-import java.util.logging.Handler;
 
 import org.apache.tika.*;
-import org.apache.tika.exception.TikaException;
 import org.apache.tika.language.LanguageIdentifier;
 import org.apache.tika.metadata.HttpHeaders;
 import org.apache.tika.metadata.Metadata;
@@ -20,8 +16,6 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
 public class MainFile {
 
@@ -31,8 +25,8 @@ public class MainFile {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try{
-			file = new File("sample.pdf");
-			bw = new BufferedWriter(new FileWriter("op.txt"));
+			file = new File("sample.pdf");		//input file name
+			bw = new BufferedWriter(new FileWriter("op.txt"));		//output file name
 			long lStartTime = new Date().getTime();
 			printcontent1();
 			//getmetadata();
