@@ -26,8 +26,6 @@ public class Clustering {
  		model.buildClusterer(data);
  		System.out.println(model);
  		
- 		
- 		
  	/*	
  		ClusterEvaluation clsEval = new ClusterEvaluation();
  		String dataset1 = "data/test.arff";
