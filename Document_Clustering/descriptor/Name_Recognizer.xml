@@ -22,7 +22,7 @@
 <analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
   <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
   <primitive>true</primitive>
-  <annotatorImplementationName>com.cas.annotators.RegExAnnotator</annotatorImplementationName>
+  <annotatorImplementationName>com.annotators.RegExAnnotator</annotatorImplementationName>
   <analysisEngineMetaData>
     <name>Simple Name Recognizer using Regular Expressions</name>
     <description>Detects Names using a simple regular expression.</description>

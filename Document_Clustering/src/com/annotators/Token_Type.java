@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.cas.annotators;
+package com.annotators;
 
 import org.apache.uima.cas.FeatureStructure;
 import org.apache.uima.cas.Type;

@@ -28,21 +28,12 @@ import org.apache.uima.collection.CollectionException;
 import org.apache.uima.util.FileUtils;
 import org.apache.uima.util.Progress;
 
+import com.features.*;
+
 import weka.clusterers.SimpleKMeans;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
-
-class DocInfo
-{
-	HashMap<String, Integer> wordCount;
-	Integer totalWords;
-	DocInfo()
-	{
-		this.wordCount=new HashMap<String, Integer>();
-		this.totalWords=0;
-	}
-}
 
 public class MainFile {
 
@@ -50,16 +41,24 @@ public class MainFile {
 	File[] files;
 	BufferedWriter bw; 
 	String st;
-	static TreeMap<String, Integer> uniqWords;
-	static HashMap<String, DocInfo> docWords;
-	static Integer totalUniqWords=0,totalDocs=0;
-	ProcessAnnotations objAnnotation;
+	public static TreeMap<String, Integer> uniqWords;
+	public static HashMap<String, DocInfo> docWords;
+	public static String currentDoc;
+	static ArrayList<Integer> featureChoice;
+	public static Integer totalUniqWords=0;
+	static Integer totalDocs=0;
+	Unigram objUnigram;
+	Bigram objBigram;
+	Trigram objTrigram;
+	//ProcessAnnotations objAnnotation;
 	static MainFile obj;
-	DocInfo doc;
+	public static DocInfo doc;
 	int i;
 	StringBuilder sb,nullsb;
-	static PorterStemmer myStem;
+	public static PorterStemmer myStem;
 	static String destFolder="resources/clustered",dataset="resources/data.arff";
+	int no_cluster=2;
+	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -74,6 +73,7 @@ public class MainFile {
 
 	public void process()
 	{
+		String[] para = new String[2];
 		try{
 			inputDir=new File("resources/raw_data");
 			outputDir=new File("resources/data");
@@ -88,19 +88,40 @@ public class MainFile {
 				//delete older files in op directory
 				FileUtils.deleteAllFiles(outputDir); 
 
-				String para[]=new String[2];
-				para[0]="descriptor/Unigram.xml"; 	//Name of descriptor
-
 				// process documents
 				for (i = 0; i < files.length; i++) {
 					if (!files[i].isDirectory()) {
 						st=outputDir.getPath()+"/"+files[i].getName().replaceFirst("[.][^.]+$", "")+".txt";
 						file = new File(files[i].getPath());				//input file name
 						bw = new BufferedWriter(new FileWriter(st));		//output file name
-						writeContent();	
+						processRawData();	
 						bw.close();
-						para[1]=st;					//Data folder
-						objAnnotation.analyze(para);
+						// read contents of file
+						currentDoc = FileUtils.file2String(new File(st));
+						para[1]=st;
+						doc=new DocInfo();
+						for(int c=0;c<featureChoice.size();c++)
+						{
+							switch(featureChoice.get(c)){
+							case 0: objUnigram=new Unigram();
+									para[0]="descriptor/Unigram.xml"; 	//Name of descriptor
+									objUnigram.analyze(para);
+									break;
+							case 1: objBigram=new Bigram();
+									para[0]="descriptor/Bigram.xml";
+									objBigram.analyze(para);
+									break;
+							case 2: objTrigram=new Trigram();
+								para[0]="descriptor/Trigram.xml";
+								objTrigram.analyze(para);
+								break;
+							}
+						}
+						
+						if(doc.totalWords!=0)
+							docWords.put((new File(st)).getName(), doc);
+						
+						//objAnnotation.analyze(para);
 
 						/*for(Map.Entry<String,Integer> entry : MainFile.uniqWords.entrySet()) {
 							  String key = entry.getKey();
@@ -117,7 +138,7 @@ public class MainFile {
 								  Integer value1 = entry2.getValue();
 								  System.out.println(key1 + " ## " + value1);
 							  }
-							}*/
+							}*/	
 					}
 				}
 				if(totalUniqWords!=0)
@@ -138,7 +159,6 @@ public class MainFile {
 	public void clusterData()
 	{
 		DataSource source;
-		int no_cluster=4;
 		try {
 			source = new DataSource(dataset);
 
@@ -175,11 +195,11 @@ public class MainFile {
 			for (Instance instance : data) {
 				no=model.clusterInstance(instance);
 				Files.copy(files[i].toPath(),(new File(destFolder+"/"+no+"/"+files[i].getName())).toPath(), StandardCopyOption.REPLACE_EXISTING);
-				System.out.println(files[i]+"-->"+no);
+	//			System.out.println(files[i]+"-->"+no);
 				i++;
 			}
-			System.out.println(i);
-			System.out.println(model);
+		//	System.out.println(i);
+		//	System.out.println(model);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -240,7 +260,7 @@ public class MainFile {
 					tf=doc.wordCount.get(key);
 					if(tf!=null)
 					{
-						idf=Math.log(totalDocs*1.0/value);
+						idf=Math.log10(totalDocs*1.0/value);
 						tf_idf=tf*idf;
 						sb.append(tf_idf+",");
 					}
@@ -259,21 +279,31 @@ public class MainFile {
 		}
 	}
 
-	public void writeContent()
+	public void processRawData()
 	{
 		Tika obj=new Tika();
 		Reader r;
-		Boolean fg=true;
+		Boolean fg=true;	//specify previous character is not space
+		char dataChar;
+		int data;
 		try {
 			r=obj.parse(file);
-			int data = r.read();
-			while(data!=-1 && (data==' ' || data=='\t' || data=='\n'))
+			data = r.read();
+			while(data!=-1 && (data==' ' || data=='\t' || data=='\n' || data=='-'))
 			{
 				data = r.read();
 			}
 			while(data != -1){
-				char dataChar = (char) data;
-
+				dataChar = (char) data;
+				
+				if(fg && dataChar=='-')
+				{
+					while(data != -1 && (dataChar=='-' || dataChar=='\n'))
+					{
+						data = r.read();
+						dataChar = (char) data;
+					}
+				}
 				if(dataChar==' ' || dataChar=='\t' || dataChar=='\n')
 				{
 					if(fg)
@@ -304,7 +334,10 @@ public class MainFile {
 	{
 		uniqWords=new TreeMap<String, Integer>();
 		docWords=new HashMap<String, DocInfo>();
-		objAnnotation=new ProcessAnnotations();
 		myStem=new PorterStemmer();
+		featureChoice=new ArrayList<Integer>(15);
+		featureChoice.add(0);
+		featureChoice.add(1);
+		//featureChoice.add(2);
 	}
 }

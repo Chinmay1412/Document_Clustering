@@ -52,7 +52,7 @@
  */
 package com.extraction;
 
-class PorterStemmer
+public class PorterStemmer
 {
 	private char[] b;
 	private int i,    /* offset into b */

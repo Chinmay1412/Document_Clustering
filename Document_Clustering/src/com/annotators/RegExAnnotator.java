@@ -1,4 +1,4 @@
-package com.cas.annotators;
+package com.annotators;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -69,9 +69,9 @@ TypeNames[i].</description>
       <nameValuePair>
         <name>Patterns</name>
         <value>
-          <array>
-            <!--  <string>[a-zA-Z]+(([-][\n])|[-])?[a-zA-Z]*</string>  -->
-            <string>[A-Za-z_]+|\p{Punct}</string>
+          <array><!-- [^\s]+[\n ][^\s]+ -->
+            <!-- <string>[a-zA-Z]+(([-][\n])|[-])?[a-zA-Z]*[\n ][a-zA-Z]+(([-][\n])|[-])?[a-zA-Z]*</string>-->
+            <string>\S+\s\S+</string>
           </array>
         </value>
       </nameValuePair>
@@ -79,7 +79,7 @@ TypeNames[i].</description>
         <name>TypeNames</name>
         <value>
           <array>
-            <string>example.Unigram</string>
+            <string>example.Bigram</string>
           </array>
         </value>
       </nameValuePair>
@@ -87,8 +87,8 @@ TypeNames[i].</description>
     <typeSystemDescription>
       <types>
         <typeDescription>
-          <name>example.Unigram</name>
-          <description>Unigram</description>
+          <name>example.Bigram</name>
+          <description>Bigram</description>
           <supertypeName>uima.tcas.Annotation</supertypeName>
         </typeDescription>
       </types>
@@ -97,7 +97,7 @@ TypeNames[i].</description>
       <capability>
         <inputs/>
         <outputs>
-         <type>example.Unigram</type>
+         <type>example.Bigram</type>
         </outputs>
         <languagesSupported/>
       </capability>

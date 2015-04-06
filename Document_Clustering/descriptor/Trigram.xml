@@ -70,8 +70,7 @@ TypeNames[i].</description>
         <name>Patterns</name>
         <value>
           <array>
-            <!--  <string>[a-zA-Z]+(([-][\n])|[-])?[a-zA-Z]*</string>  -->
-            <string>[A-Za-z_]+|\p{Punct}</string>
+            <string>\S+\s\S+\s\S+</string>
           </array>
         </value>
       </nameValuePair>
@@ -79,7 +78,7 @@ TypeNames[i].</description>
         <name>TypeNames</name>
         <value>
           <array>
-            <string>example.Unigram</string>
+            <string>example.Trigram</string>
           </array>
         </value>
       </nameValuePair>
@@ -87,8 +86,8 @@ TypeNames[i].</description>
     <typeSystemDescription>
       <types>
         <typeDescription>
-          <name>example.Unigram</name>
-          <description>Unigram</description>
+          <name>example.Trigram</name>
+          <description>Trigram</description>
           <supertypeName>uima.tcas.Annotation</supertypeName>
         </typeDescription>
       </types>
@@ -97,7 +96,7 @@ TypeNames[i].</description>
       <capability>
         <inputs/>
         <outputs>
-         <type>example.Unigram</type>
+         <type>example.Trigram</type>
         </outputs>
         <languagesSupported/>
       </capability>
