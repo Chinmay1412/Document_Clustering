@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/weka.jar"/>
 	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/opencloud.jar"/>
 	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/javafx.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/stanford-postagger-3.5.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

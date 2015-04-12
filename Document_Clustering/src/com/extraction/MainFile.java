@@ -11,8 +11,10 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.tika.*;
 import org.apache.tika.language.LanguageIdentifier;
@@ -43,21 +45,29 @@ public class MainFile {
 	String st;
 	public static TreeMap<String, Integer> uniqWords;
 	public static HashMap<String, DocInfo> docWords;
+	public static TreeSet<String> uniqPOS;
+	public static HashMap<String, DocInfo> docPOS;
 	public static String currentDoc;
+	DocInfo doc;
 	static ArrayList<Integer> featureChoice;
 	public static Integer totalUniqWords=0;
 	static Integer totalDocs=0;
 	Unigram objUnigram;
 	Bigram objBigram;
 	Trigram objTrigram;
+	Capital objCapital;
+	Punctuation objPunctuation;
+	POS objPOS;
 	//ProcessAnnotations objAnnotation;
 	static MainFile obj;
-	public static DocInfo doc;
+	//public static DocInfo doc;
 	int i;
-	StringBuilder sb,nullsb;
+	StringBuilder sb,nullsbWord,nullsbPOS;
 	public static PorterStemmer myStem;
 	static String destFolder="resources/clustered",dataset="resources/data.arff";
-	int no_cluster=2;
+	public static String currFilename;
+	String raw_data="resources/raw_data",processed="resources/data";
+	int no_cluster=3;
 	
 
 	public static void main(String[] args) {
@@ -75,8 +85,8 @@ public class MainFile {
 	{
 		String[] para = new String[2];
 		try{
-			inputDir=new File("resources/raw_data");
-			outputDir=new File("resources/data");
+			inputDir=new File(raw_data);
+			outputDir=new File(processed);
 
 			// get all files in the input directory
 			files = inputDir.listFiles();
@@ -94,12 +104,14 @@ public class MainFile {
 						st=outputDir.getPath()+"/"+files[i].getName().replaceFirst("[.][^.]+$", "")+".txt";
 						file = new File(files[i].getPath());				//input file name
 						bw = new BufferedWriter(new FileWriter(st));		//output file name
+						currFilename=(new File(st)).getName();
 						processRawData();	
 						bw.close();
 						// read contents of file
 						currentDoc = FileUtils.file2String(new File(st));
 						para[1]=st;
-						doc=new DocInfo();
+						docWords.put(currFilename, new DocInfo());
+						docPOS.put(currFilename, new DocInfo());
 						for(int c=0;c<featureChoice.size();c++)
 						{
 							switch(featureChoice.get(c)){
@@ -112,14 +124,30 @@ public class MainFile {
 									objBigram.analyze(para);
 									break;
 							case 2: objTrigram=new Trigram();
-								para[0]="descriptor/Trigram.xml";
-								objTrigram.analyze(para);
-								break;
+									para[0]="descriptor/Trigram.xml";
+									objTrigram.analyze(para);
+									break;
+							case 4: objPOS=new POS();
+									para[0]="tagger/english-bidirectional-distsim.tagger";
+									objPOS.analyze(para);
+									break;
+							case 5: objPunctuation=new Punctuation();
+									para[0]="descriptor/Punctuation.xml"; 
+									objPunctuation.analyze(para);
+									break;
+							case 6: objCapital=new Capital();
+									para[0]="descriptor/Unigram.xml"; 
+									objCapital.analyze(para);
+									break;
 							}
 						}
 						
-						if(doc.totalWords!=0)
-							docWords.put((new File(st)).getName(), doc);
+						doc=docWords.get(currFilename);
+						if(doc.totalWords==0)
+							docWords.remove(currFilename);
+						doc=docPOS.get(currFilename);
+						if(doc.totalWords==0)
+							docPOS.remove(currFilename);
 						
 						//objAnnotation.analyze(para);
 
@@ -127,9 +155,9 @@ public class MainFile {
 							  String key = entry.getKey();
 							  Integer value = entry.getValue();
 							  System.out.println(key + " => " + value);
-							}
-
-						for(Map.Entry<String, DocInfo> entry : MainFile.docWords.entrySet()) {
+							}*/
+						
+						/*for(Map.Entry<String, DocInfo> entry : MainFile.docPOS.entrySet()) {
 							  String key = entry.getKey();
 							  DocInfo value = entry.getValue();
 							  System.out.println(key + " ===========================> "+value.totalWords);
@@ -138,7 +166,7 @@ public class MainFile {
 								  Integer value1 = entry2.getValue();
 								  System.out.println(key1 + " ## " + value1);
 							  }
-							}*/	
+							}*/
 					}
 				}
 				if(totalUniqWords!=0)
@@ -194,8 +222,8 @@ public class MainFile {
 			int no;
 			for (Instance instance : data) {
 				no=model.clusterInstance(instance);
-				Files.copy(files[i].toPath(),(new File(destFolder+"/"+no+"/"+files[i].getName())).toPath(), StandardCopyOption.REPLACE_EXISTING);
-	//			System.out.println(files[i]+"-->"+no);
+				Files.copy(new File(processed+"/"+files[i].getName().replaceFirst("[.][^.]+$", "")+".txt").toPath(),(new File(destFolder+"/"+no+"/"+files[i].getName().replaceFirst("[.][^.]+$", "")+".txt")).toPath(), StandardCopyOption.REPLACE_EXISTING);
+				//System.out.println(processed+"/"+files[i].getName().replaceFirst("[.][^.]+$", "")+".txt"+"-->"+no);
 				i++;
 			}
 		//	System.out.println(i);
@@ -225,35 +253,38 @@ public class MainFile {
 
 	public void datasetCreation()
 	{
+		int y=0;
 		try {
 			sb=new StringBuilder(1000);
-			nullsb=new StringBuilder(1000);
 			//file for clustering in required format
 			bw = new BufferedWriter(new FileWriter(dataset));
 			bw.write("@relation document\n\n");
 
-			for(i=0;i<totalUniqWords;i++)
+			for(i=0;i<uniqWords.size();i++)
 			{
-				bw.write("@attribute uw"+i+" numeric\n");
-				nullsb.append("0,");
+				bw.write("@attribute uw"+y+" numeric\n");
+				y++;
 			}
-			nullsb.setCharAt(nullsb.length()-1,'\n');
+			for(i=0;i<uniqPOS.size();i++)
+			{
+				bw.write("@attribute uw"+y+" numeric\n");
+				y++;
+			}
 			bw.write("\n@data\n");
 
 			String key;
 			Integer value,tf;
 			Double tf_idf,idf;
+			Iterator<String> iterator;
 			for (i = 0; i < files.length; i++) {
 				sb.setLength(0);
 				st=files[i].getName().replaceFirst("[.][^.]+$", "")+".txt";
 				//System.out.println(docWords.size());
-				doc=docWords.get(st);
-				if(doc==null || doc.totalWords==0)
-				{
-					bw.write(nullsb.toString());
+				
+				if(docPOS.get(st)==null && docWords.get(st)==null)
 					continue;
-				}
-
+				
+				doc=docWords.get(st);
 				for(Map.Entry<String,Integer> entry : MainFile.uniqWords.entrySet()) {
 					key = entry.getKey();
 					value = entry.getValue();
@@ -265,10 +296,21 @@ public class MainFile {
 						sb.append(tf_idf+",");
 					}
 					else
-					{
 						sb.append("0,");
-					}
 				}
+				
+				doc=docPOS.get(st);
+				iterator = uniqPOS.iterator();
+			    while (iterator.hasNext()){
+			    	tf=doc.wordCount.get(iterator.next());
+			    	if(tf!=null)
+			    	{
+			    		tf_idf= (double)tf/doc.totalWords;
+			    		sb.append(tf_idf+",");
+			    	}
+			    	else
+						sb.append("0,");
+			    }
 				sb.setCharAt(sb.length()-1,'\n');
 				bw.write(sb.toString());
 			}
@@ -336,8 +378,10 @@ public class MainFile {
 		docWords=new HashMap<String, DocInfo>();
 		myStem=new PorterStemmer();
 		featureChoice=new ArrayList<Integer>(15);
+		uniqPOS=new TreeSet<String>();
+		docPOS=new HashMap<String, DocInfo>();
+		//featureChoice.add(4);
 		featureChoice.add(0);
-		featureChoice.add(1);
-		//featureChoice.add(2);
+		featureChoice.add(2);
 	}
 }

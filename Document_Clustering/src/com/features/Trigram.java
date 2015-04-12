@@ -61,6 +61,7 @@ public class Trigram {
 	boolean matches;
 	int maxLength=20;
 	HashMap<String, Byte> tempCheck;
+	DocInfo doc;
 	
 	public Trigram()
 	{
@@ -72,6 +73,7 @@ public class Trigram {
 		// get iterator over annotations
 		FSIterator iter = aCAS.getAnnotationIndex(aAnnotType).iterator();
 
+		doc=MainFile.docWords.get(MainFile.currFilename);
 		// iterate
 		while (iter.isValid()) {
 			FeatureStructure fs = iter.get();
@@ -81,11 +83,11 @@ public class Trigram {
 				present=tempCheck.get(word);
 				if(present!=null)
 				{
-					MainFile.doc.totalWords=MainFile.doc.totalWords+1;
-					wordcnt=MainFile.doc.wordCount.get(word);
+					doc.totalWords=doc.totalWords+1;
+					wordcnt=doc.wordCount.get(word);
 					if(wordcnt==null)
 					{
-						MainFile.doc.wordCount.put(word, 2);
+						doc.wordCount.put(word, 2);
 						doccnt=MainFile.uniqWords.get(word);
 						if(doccnt==null)
 						{
@@ -101,7 +103,7 @@ public class Trigram {
 					else
 					{
 						wordcnt=wordcnt+1;
-						MainFile.doc.wordCount.put(word, wordcnt);
+						doc.wordCount.put(word, wordcnt);
 					}
 				}
 				else
@@ -124,7 +126,7 @@ public class Trigram {
 
 		if (aFS instanceof AnnotationFS) {
 			AnnotationFS annot = (AnnotationFS) aFS;
-			String st = new String(annot.getCoveredText().toLowerCase());
+			String st = new String(annot.getCoveredText());
 		//	if(st.contains("-\n"))
 		//		st=st.replaceAll("-\n", "");
 			
@@ -209,7 +211,7 @@ public class Trigram {
 			File inputFile = new File(args[1]);
 
 			// read contents of file
-			String document =new String(MainFile.currentDoc);
+			String document =new String(MainFile.currentDoc.toLowerCase());
 						
 			int p=0;
 			for(int k=0;k<3;k++)		//3 for trigram

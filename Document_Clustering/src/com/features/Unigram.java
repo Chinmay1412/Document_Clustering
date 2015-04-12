@@ -56,6 +56,7 @@ public class Unigram {
 	Matcher matcher;
 	boolean matches;
 	int maxLength=20;
+	DocInfo doc;
 	
 	public Unigram()
 	{
@@ -65,18 +66,19 @@ public class Unigram {
 	public void processAnnotations(CAS aCAS, Type aAnnotType, PrintStream aOut) {
 		// get iterator over annotations
 		FSIterator iter = aCAS.getAnnotationIndex(aAnnotType).iterator();
-
+		
+		doc=MainFile.docWords.get(MainFile.currFilename);
 		// iterate
 		while (iter.isValid()) {
 			FeatureStructure fs = iter.get();
 			word=getFS(fs, aCAS, 0, aOut);
 			if(word!=null)
 			{
-				MainFile.doc.totalWords=MainFile.doc.totalWords+1;
-				wordcnt=MainFile.doc.wordCount.get(word);
+				doc.totalWords=doc.totalWords+1;
+				wordcnt=doc.wordCount.get(word);
 				if(wordcnt==null)
 				{
-					MainFile.doc.wordCount.put(word, 1);
+					doc.wordCount.put(word, 1);
 					doccnt=MainFile.uniqWords.get(word);
 					if(doccnt==null)
 					{
@@ -92,7 +94,7 @@ public class Unigram {
 				else
 				{
 					wordcnt=wordcnt+1;
-					MainFile.doc.wordCount.put(word, wordcnt);
+					doc.wordCount.put(word, wordcnt);
 				}
 			}
 			iter.moveToNext();
@@ -108,7 +110,7 @@ public class Unigram {
 
 		if (aFS instanceof AnnotationFS) {
 			AnnotationFS annot = (AnnotationFS) aFS;
-			String st = new String(annot.getCoveredText().toLowerCase());
+			String st = new String(annot.getCoveredText());
 			//if(st.contains("-\n"))
 			//	st=st.replace("-\n", "");
 			
@@ -164,7 +166,7 @@ public class Unigram {
 			}
 
 			// read contents of file
-			String document =new String(MainFile.currentDoc);
+			String document =new String(MainFile.currentDoc.toLowerCase());
 
 			if(document!=null)
 			{
