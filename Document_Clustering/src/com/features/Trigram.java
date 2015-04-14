@@ -73,7 +73,7 @@ public class Trigram {
 		// get iterator over annotations
 		FSIterator iter = aCAS.getAnnotationIndex(aAnnotType).iterator();
 
-		doc=MainFile.docWords.get(MainFile.currFilename);
+		doc=MainFile.docTrigrams.get(MainFile.currFilename);
 		// iterate
 		while (iter.isValid()) {
 			FeatureStructure fs = iter.get();
@@ -88,16 +88,16 @@ public class Trigram {
 					if(wordcnt==null)
 					{
 						doc.wordCount.put(word, 2);
-						doccnt=MainFile.uniqWords.get(word);
+						doccnt=MainFile.uniqTrigrams.get(word);
 						if(doccnt==null)
 						{
-							MainFile.uniqWords.put(word, 2);
-							MainFile.totalUniqWords=MainFile.totalUniqWords+1;
+							MainFile.uniqTrigrams.put(word, 2);
+							MainFile.totalFeatures=MainFile.totalFeatures+1;
 						}
 						else
 						{
 							doccnt=doccnt+1;
-							MainFile.uniqWords.put(word, doccnt);
+							MainFile.uniqTrigrams.put(word, doccnt);
 						}    			  
 					}
 					else
@@ -208,8 +208,7 @@ public class Trigram {
 	public void analyze(String[] args) {
 		try {
 			File taeDescriptor = new File(args[0]);
-			File inputFile = new File(args[1]);
-
+	
 			// read contents of file
 			String document =new String(MainFile.currentDoc.toLowerCase());
 						

@@ -68,7 +68,7 @@ public class Capital {
 		// get iterator over annotations
 		FSIterator iter = aCAS.getAnnotationIndex(aAnnotType).iterator();
 
-		doc=MainFile.docWords.get(MainFile.currFilename);
+		doc=MainFile.docCapitals.get(MainFile.currFilename);
 		// iterate
 		while (iter.isValid()) {
 			FeatureStructure fs = iter.get();
@@ -80,16 +80,16 @@ public class Capital {
 				if(wordcnt==null)
 				{
 					doc.wordCount.put(word, 1);
-					doccnt=MainFile.uniqWords.get(word);
+					doccnt=MainFile.uniqCapitals.get(word);
 					if(doccnt==null)
 					{
-						MainFile.uniqWords.put(word, 1);
-						MainFile.totalUniqWords=MainFile.totalUniqWords+1;
+						MainFile.uniqCapitals.put(word, 1);
+						MainFile.totalFeatures=MainFile.totalFeatures+1;
 					}
 					else
 					{
 						doccnt=doccnt+1;
-						MainFile.uniqWords.put(word, doccnt);
+						MainFile.uniqCapitals.put(word, doccnt);
 					}    			  
 				}
 				else
@@ -120,15 +120,10 @@ public class Capital {
 			if(matches!=true)
 				return null;
 			
-			if(StopWords.sw.get(st)==null)
-			{
-				if(st.length()>=maxLength)
-					return null;
-				st=MainFile.myStem.stem(st);
-				return st;
-			}
-			else
+			if(st.length()<=1 || st.length()>=maxLength)
 				return null;
+			
+			return st;
 		}
 		return null;
 	}
@@ -141,8 +136,7 @@ public class Capital {
 	public void analyze(String[] args) {
 		try {
 			File taeDescriptor = new File(args[0]);
-			File inputFile = new File(args[1]);
-
+		
 			// get Resource Specifier from XML file or TEAR
 			XMLInputSource in = new XMLInputSource(taeDescriptor);
 			ResourceSpecifier specifier = UIMAFramework.getXMLParser().parseResourceSpecifier(in);

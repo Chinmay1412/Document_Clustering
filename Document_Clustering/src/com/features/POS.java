@@ -27,8 +27,8 @@ public class POS {
 	public void analyze(String[] args) {
 		try {
 		DocInfo doc;
-		Integer wordcnt,doccnt;
-		System.out.println(args[1]);
+		Integer wordcnt;
+		//System.out.println(args[1]);
 		MaxentTagger tagger = new MaxentTagger(args[0]);
 		TokenizerFactory<CoreLabel> ptbTokenizerFactory = PTBTokenizer.factory(new CoreLabelTokenFactory(),
 				"untokenizable=noneKeep");		
@@ -48,7 +48,7 @@ public class POS {
 					if(!(MainFile.uniqPOS.contains(tw.tag())))
 					{
 						MainFile.uniqPOS.add(tw.tag());
-						MainFile.totalUniqWords=MainFile.totalUniqWords+1;
+						MainFile.totalFeatures=MainFile.totalFeatures+1;
 					}
 				}
 				else

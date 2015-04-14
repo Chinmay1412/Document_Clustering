@@ -67,7 +67,7 @@ public class Unigram {
 		// get iterator over annotations
 		FSIterator iter = aCAS.getAnnotationIndex(aAnnotType).iterator();
 		
-		doc=MainFile.docWords.get(MainFile.currFilename);
+		doc=MainFile.docUnigrams.get(MainFile.currFilename);
 		// iterate
 		while (iter.isValid()) {
 			FeatureStructure fs = iter.get();
@@ -79,16 +79,16 @@ public class Unigram {
 				if(wordcnt==null)
 				{
 					doc.wordCount.put(word, 1);
-					doccnt=MainFile.uniqWords.get(word);
+					doccnt=MainFile.uniqUnigrams.get(word);
 					if(doccnt==null)
 					{
-						MainFile.uniqWords.put(word, 1);
-						MainFile.totalUniqWords=MainFile.totalUniqWords+1;
+						MainFile.uniqUnigrams.put(word, 1);
+						MainFile.totalFeatures=MainFile.totalFeatures+1;
 					}
 					else
 					{
 						doccnt=doccnt+1;
-						MainFile.uniqWords.put(word, doccnt);
+						MainFile.uniqUnigrams.put(word, doccnt);
 					}    			  
 				}
 				else
@@ -133,15 +133,14 @@ public class Unigram {
 	}
 
 	/**
-	 * Main program for testing this class. Ther are two required arguments - the path to the XML
+	 * Main program for testing this class. There are two required arguments - the path to the XML
 	 * descriptor for the TAE to run and an input file. Additional arguments are Type or Feature names
 	 * to be included in the ResultSpecification passed to the TAE.
 	 */
 	public void analyze(String[] args) {
 		try {
 			File taeDescriptor = new File(args[0]);
-			File inputFile = new File(args[1]);
-
+		
 			// get Resource Specifier from XML file or TEAR
 			XMLInputSource in = new XMLInputSource(taeDescriptor);
 			ResourceSpecifier specifier = UIMAFramework.getXMLParser().parseResourceSpecifier(in);

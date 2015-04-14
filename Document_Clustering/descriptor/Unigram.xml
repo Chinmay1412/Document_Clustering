@@ -70,8 +70,8 @@ TypeNames[i].</description>
         <name>Patterns</name>
         <value>
           <array>
-            <!--  <string>[a-zA-Z]+(([-][\n])|[-])?[a-zA-Z]*</string>  -->
-            <string>[A-Za-z_]+|\p{Punct}</string>
+            <!--  <string>[a-zA-Z]+(([-][\n])|[-])?[a-zA-Z]*</string> ?@[\]^`{|}~ -->
+              <string>[A-Za-z][A-Za-z_]*(?=[-!"#$%'()*+,./:;?@\[\\\]^`{|}~\s])</string> 
           </array>
         </value>
       </nameValuePair>

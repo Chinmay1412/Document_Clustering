@@ -56,7 +56,6 @@ public class Punctuation {
 	Pattern pattern;
 	Matcher matcher;
 	boolean matches;
-	int maxLength=20;
 	DocInfo doc;
 	
 	public Punctuation()
@@ -68,7 +67,7 @@ public class Punctuation {
 		// get iterator over annotations
 		FSIterator iter = aCAS.getAnnotationIndex(aAnnotType).iterator();
 
-		doc=MainFile.docWords.get(MainFile.currFilename);
+		doc=MainFile.docPunct.get(MainFile.currFilename);
 		// iterate
 		while (iter.isValid()) {
 			FeatureStructure fs = iter.get();
@@ -80,23 +79,14 @@ public class Punctuation {
 				if(wordcnt==null)
 				{
 					doc.wordCount.put(word, 1);
-					doccnt=MainFile.uniqWords.get(word);
-					if(doccnt==null)
+					if(!(MainFile.uniqPOS.contains(word)))
 					{
-						MainFile.uniqWords.put(word, 1);
-						MainFile.totalUniqWords=MainFile.totalUniqWords+1;
+						MainFile.uniqPunct.add(word);
+						MainFile.totalFeatures=MainFile.totalFeatures+1;
 					}
-					else
-					{
-						doccnt=doccnt+1;
-						MainFile.uniqWords.put(word, doccnt);
-					}    			  
 				}
 				else
-				{
-					wordcnt=wordcnt+1;
-					doc.wordCount.put(word, wordcnt);
-				}
+					doc.wordCount.put(word, wordcnt+1);
 			}
 			iter.moveToNext();
 		}
@@ -120,15 +110,7 @@ public class Punctuation {
 			if(matches!=true)
 				return null;
 			
-			if(StopWords.sw.get(st)==null)
-			{
-				if(st.length()>=maxLength)
-					return null;
-				st=MainFile.myStem.stem(st);
-				return st;
-			}
-			else
-				return null;
+			return st;
 		}
 		return null;
 	}
@@ -141,8 +123,7 @@ public class Punctuation {
 	public void analyze(String[] args) {
 		try {
 			File taeDescriptor = new File(args[0]);
-			File inputFile = new File(args[1]);
-
+		
 			// get Resource Specifier from XML file or TEAR
 			XMLInputSource in = new XMLInputSource(taeDescriptor);
 			ResourceSpecifier specifier = UIMAFramework.getXMLParser().parseResourceSpecifier(in);

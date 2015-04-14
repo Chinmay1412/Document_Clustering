@@ -69,7 +69,7 @@ public class ProcessAnnotations {
 		// get iterator over annotations
 		FSIterator iter = aCAS.getAnnotationIndex(aAnnotType).iterator();
 
-		// iterate
+		/*// iterate
 		while (iter.isValid()) {
 			FeatureStructure fs = iter.get();
 			unigram=printFS(fs, aCAS, 0, aOut);
@@ -99,7 +99,7 @@ public class ProcessAnnotations {
 				}
 			}
 			iter.moveToNext();
-		}
+		}*/
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class ProcessAnnotations {
 			processAnnotations(cas, annotationType, System.out);
 
 			if(doc.totalWords!=0)
-				MainFile.docWords.put(inputFile.getName(), doc);
+		//		MainFile.docWords.put(inputFile.getName(), doc);
 
 			// destroy AE
 			ae.destroy();
