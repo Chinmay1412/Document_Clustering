@@ -1,5 +1,3 @@
-package com.annotators;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,10 @@ package com.annotators;
  * specific language governing permissions and limitations
  * under the License.
  */
+package com.annotators;
+
+//This file is annotator file required for Apache UIMA to extract tokens
+
 import java.text.BreakIterator;
 import java.text.ParsePosition;
 import java.util.Locale;

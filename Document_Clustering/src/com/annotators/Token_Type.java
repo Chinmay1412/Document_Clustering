@@ -19,6 +19,8 @@
 
 package com.annotators;
 
+//This file is annotator file required for Apache UIMA to extract tokens
+
 import org.apache.uima.cas.FeatureStructure;
 import org.apache.uima.cas.Type;
 import org.apache.uima.cas.impl.CASImpl;

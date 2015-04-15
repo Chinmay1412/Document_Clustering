@@ -44,13 +44,10 @@ import org.apache.uima.util.XMLInputSource;
 
 import com.extraction.*;
 
-/**
-* A simple example of how to extract information from the CAS. This example retrieves all
-* annotations of a specified type from a CAS and prints them (along with all of their features) to
-* a PrintStream.
-* 
-* 
-*/
+/*
+ * Gets all three consecutive words from document based on related descriptor file and discards bad bigrams 
+ * like containing stopwords and stem at last before storing
+ */
 public class Trigram {
 
 	Byte present;

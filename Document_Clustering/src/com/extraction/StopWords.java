@@ -2,6 +2,9 @@ package com.extraction;
 
 import java.util.HashMap;
 
+/*
+ * class contains hashmap of stop words
+ */
 public class StopWords {
 	public static final HashMap<String, Byte> sw = new HashMap<String, Byte>(620);
 	static {

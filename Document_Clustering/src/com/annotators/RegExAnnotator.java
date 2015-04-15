@@ -1,5 +1,3 @@
-package com.annotators;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,14 @@ package com.annotators;
  * specific language governing permissions and limitations
  * under the License.
  */
+
+/*
+ * This package contains all annotator files required for Apache UIMA to work properly with different descriptor files
+ */
+package com.annotators;
+
+//This file is annotator file required for Apache UIMA to extract features based on regex
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

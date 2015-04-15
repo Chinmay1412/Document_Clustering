@@ -1,22 +1,22 @@
 package com.features;
 
 /* Licensed to the Apache Software Foundation (ASF) under one
-* or more contributor license agreements.  See the NOTICE file
-* distributed with this work for additional information
-* regarding copyright ownership.  The ASF licenses this file
-* to you under the Apache License, Version 2.0 (the
-* "License"); you may not use this file except in compliance
-* with the License.  You may obtain a copy of the License at
-* 
-*   http://www.apache.org/licenses/LICENSE-2.0
-* 
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied.  See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Iterator;
@@ -41,13 +41,10 @@ import org.apache.uima.util.FileUtils;
 import org.apache.uima.util.XMLInputSource;
 import com.extraction.*;
 
-/**
-* A simple example of how to extract information from the CAS. This example retrieves all
-* annotations of a specified type from a CAS and prints them (along with all of their features) to
-* a PrintStream.
-* 
-* 
-*/
+/*
+ * Gets all unigrams from document based on related descriptor file and discards bad unigrams 
+ * like containing stopwords or length more than 20 and stem at last before storing
+ */
 public class Unigram {
 
 	String word;
@@ -57,7 +54,7 @@ public class Unigram {
 	boolean matches;
 	int maxLength=20;
 	DocInfo doc;
-	
+
 	public Unigram()
 	{
 		pattern = Pattern.compile("[A-Za-z_]+");
@@ -66,7 +63,7 @@ public class Unigram {
 	public void processAnnotations(CAS aCAS, Type aAnnotType, PrintStream aOut) {
 		// get iterator over annotations
 		FSIterator iter = aCAS.getAnnotationIndex(aAnnotType).iterator();
-		
+
 		doc=MainFile.docUnigrams.get(MainFile.currFilename);
 		// iterate
 		while (iter.isValid()) {
@@ -106,19 +103,19 @@ public class Unigram {
 
 		if(aFS.getType().getName().equalsIgnoreCase("uima.tcas.DocumentAnnotation"))
 			return null;
-	
+
 
 		if (aFS instanceof AnnotationFS) {
 			AnnotationFS annot = (AnnotationFS) aFS;
 			String st = new String(annot.getCoveredText());
 			//if(st.contains("-\n"))
 			//	st=st.replace("-\n", "");
-			
+
 			matcher = pattern.matcher(st);
 			matches = matcher.matches();
 			if(matches!=true)
 				return null;
-			
+
 			if(StopWords.sw.get(st)==null)
 			{
 				if(st.length()>=maxLength)
@@ -140,7 +137,7 @@ public class Unigram {
 	public void analyze(String[] args) {
 		try {
 			File taeDescriptor = new File(args[0]);
-		
+
 			// get Resource Specifier from XML file or TEAR
 			XMLInputSource in = new XMLInputSource(taeDescriptor);
 			ResourceSpecifier specifier = UIMAFramework.getXMLParser().parseResourceSpecifier(in);
@@ -172,11 +169,11 @@ public class Unigram {
 				// send doc through the AE
 				cas.setDocumentText(document);
 				ae.process(cas, resultSpec);
-	
+
 				Type annotationType = cas.getTypeSystem().getType(CAS.TYPE_NAME_ANNOTATION);
 				processAnnotations(cas, annotationType, System.out);
 			}
-			
+
 			// destroy AE
 			ae.destroy();
 		} catch (Exception e) {

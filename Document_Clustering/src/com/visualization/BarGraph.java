@@ -26,6 +26,13 @@ import javafx.stage.WindowEvent;
 
 import com.extraction.*;
 
+/*
+ * Draw bar graph based on specified parameters
+ * In graph X-aixs specifies selected feature names
+ * In graph Y-axis specifies selected feature values
+ * Graph is for specific specified cluster
+ * Output is stored as image named 'chart.png'
+ */
 public class BarGraph extends Application {
 
 	Stage stage;
@@ -78,6 +85,15 @@ public class BarGraph extends Application {
 			case 6: series.setName("Capitalization");
 					makeData(parameters.get(2)+File.separator+"capitals.txt",parameters.get(2)+File.separator+"capital_tf.txt",",");
 					break;
+			case 7: series.setName("Name entity frequency");
+					makeData(parameters.get(2)+File.separator+"NE.txt",parameters.get(2)+File.separator+"NE_tf.txt",",");
+					break;
+			case 8: series.setName("Positive-Negative words frequency");
+					makeData(parameters.get(2)+File.separator+"PN.txt",parameters.get(2)+File.separator+"PN_tf.txt",",");
+					break;
+			case 9: series.setName("URL");
+					makeData(parameters.get(2)+File.separator+"urls.txt",parameters.get(2)+File.separator+"url_tf.txt",",");
+					break;
 		}
 		
 		for( int k=0; k < key.size(); k++){
@@ -90,7 +106,7 @@ public class BarGraph extends Application {
 		stage.setScene(scene);
 		//stage.show();
 		WritableImage snapShot = scene.snapshot(null);
-		ImageIO.write(SwingFXUtils.fromFXImage(snapShot,null), "png", new File("test.png"));
+		ImageIO.write(SwingFXUtils.fromFXImage(snapShot,null), "png", new File("chart.png"));
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 	          public void handle(WindowEvent we) {
 	              //System.out.println("Stage is closing");

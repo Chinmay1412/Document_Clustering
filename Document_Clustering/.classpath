@@ -2,16 +2,18 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/tika-app-1.7.jar"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/uima-core.jar"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/uima-cpe.jar"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/uima-document-annotation.jar"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/uima-examples.jar"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/uima-tools.jar"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/weka.jar"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/opencloud.jar"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/stanford-postagger-3.5.1.jar"/>
 	<classpathentry kind="lib" path="/usr/lib/jvm/java-8-oracle/javafx-src.zip"/>
-	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jar/jfxrt.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/jfxrt.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/opencloud.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/stanford-ner.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/stanford-postagger-3.5.1.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/tagcloud.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/tika-app-1.7.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/uima-core.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/uima-cpe.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/uima-document-annotation.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/uima-examples.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/uima-tools.jar"/>
+	<classpathentry kind="lib" path="/home/chintu/git/ire_project/Document_Clustering/jars/weka.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -19,6 +19,8 @@
 
 package com.annotators;
 
+//This file is annotator file required for Apache UIMA to extract tokens
+
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.JCasRegistry;
 import org.apache.uima.jcas.cas.TOP_Type;

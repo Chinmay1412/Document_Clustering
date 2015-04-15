@@ -52,6 +52,9 @@
  */
 package com.extraction;
 
+/*
+ * class to apply porter stemmer algorithm
+ */
 public class PorterStemmer
 {
 	private char[] b;
