@@ -104,9 +104,10 @@ public class BarGraph extends Application {
 		bc.getData().addAll(series);
 
 		stage.setScene(scene);
-		//stage.show();
+		stage.show();
 		WritableImage snapShot = scene.snapshot(null);
 		ImageIO.write(SwingFXUtils.fromFXImage(snapShot,null), "png", new File("chart.png"));
+		//Platform.setImplicitExit(false);
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 	          public void handle(WindowEvent we) {
 	              //System.out.println("Stage is closing");
@@ -114,7 +115,7 @@ public class BarGraph extends Application {
 	              Platform.exit();
 	          }
 	      });   
-		stage.getOnCloseRequest().handle(new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
+		//stage.getOnCloseRequest().handle(new WindowEvent(stage,WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
 
 	public void caller(String[] args)

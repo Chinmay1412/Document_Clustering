@@ -75,7 +75,7 @@ public class WordCloud {
 			panel.add(label);
 		}
 		frame.add(panel);
-		frame.setSize(1000, 800);
+		frame.setSize(1200, 1000);
 		//frame.pack();
 		//frame.setLocation(-5000, 6000);
 		frame.setVisible(true);
@@ -88,7 +88,7 @@ public class WordCloud {
         gr.dispose();*/
 		String fileName = new String("wordcloud_"+cluster_no + ".png");
 		ImageIO.write(image, "png", new File(fileName));
-		frame.dispose();
+		//frame.dispose();
 	}
 
 	public void draw(String[] args)

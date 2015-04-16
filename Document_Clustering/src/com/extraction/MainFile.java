@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -123,10 +124,34 @@ public class MainFile {
 		docNE=new HashMap<String, DocInfo>();
 		featureChoice=new ArrayList<Integer>(diffrentFeatures);	//user can enter their choice of features and it is specified in this object
 		
+		System.out.println("Feature list:");
+		System.out.println("1. Unigram");
+		System.out.println("2. Bigram");
+		System.out.println("3. Trigram");
+		System.out.println("4. #Sentence");
+		System.out.println("5. POS Tags");
+		System.out.println("6. Punctuation");
+		System.out.println("7. Capitalization");
+		System.out.println("8. Named Entities");
+		System.out.println("9. Positive and Negative words");
+		System.out.println("10. URLs");
+		int choice;
+		Scanner in = new Scanner(System.in);
+		System.out.println("Select your features:(to stop enter -1 at last)");
+		while(true)
+		{
+			choice=Integer.parseInt(in.nextLine());
+			if(choice==-1)
+				break;
+			if(choice>10 || choice <=0)
+				continue;
+			if(!(featureChoice.contains(choice-1)))
+				featureChoice.add(choice-1);
+		}
 		//featureChoice.add(5);
 		//featureChoice.add(4);
 		//featureChoice.add(2);
-		featureChoice.add(6);
+		//featureChoice.add(6);
 	}
 	
 	/*
@@ -235,16 +260,15 @@ public class MainFile {
 			{
 				datasetCreation();
 				clusterData();
-				String[] args=new String[3];
-				args[0]="6";	//Feature selection to draw bar chart
-				args[1]="0";	//Cluster selection to draw bar chart
-				args[2]=feature_data;	//location of features files
-				BarGraph app = new BarGraph();
-				app.caller(args);	//draws bar chart according to given arguments and stored in 'chart.png' file in current project folder
-				args[0]="1";	//Cluster selection
-				args[1]=tempCluster;	//location of clustered text files
-			    WordCloud wc=new WordCloud();	
-				wc.draw(args);	//draws word cloud based on given arguments and stored in wordcloud_<cluster_no>.png file in current project folder
+				Scanner in=new Scanner(System.in);
+				System.out.println("Enter desired feature and cluster based on previously selected features for bar graph:");
+				String feature=in.nextLine();
+				String cluster=in.nextLine();
+				drawBarChart(feature,cluster);
+				
+				System.out.println("Enter desired cluster for word cloud:");
+				cluster=in.nextLine();
+				drawWordCloud(cluster);				
 			}
 			else
 			{
@@ -258,6 +282,25 @@ public class MainFile {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	void drawBarChart(String feature, String cluster)
+	{
+		String[] args=new String[3];
+		args[0]=(Integer.parseInt(feature)-1)+"";	//Feature selection to draw bar chart
+		args[1]=(Integer.parseInt(cluster)-1)+"";	//Cluster selection to draw bar chart
+		args[2]=feature_data;	//location of features files
+		BarGraph app = new BarGraph();
+		app.caller(args);	//draws bar chart according to given arguments and stored in 'chart.png' file in current project folder
+	}
+	
+	void drawWordCloud(String cluster)
+	{
+		String[] args=new String[3];
+		args[0]=(Integer.parseInt(cluster)-1)+"";	//Cluster selection
+		args[1]=tempCluster;	//location of clustered text files
+	    WordCloud wc=new WordCloud();	
+		wc.draw(args);	//draws word cloud based on given arguments and stored in wordcloud_<cluster_no>.png file in current project folder
 	}
 	
 	/*
